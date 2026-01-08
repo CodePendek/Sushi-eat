@@ -22,14 +22,31 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        @keyframes custom-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+.pulse-effect {
+    animation: custom-pulse 1s infinite ease-in-out;
+}
+
     </style>
 </head>
 <body class="bg-[#FCF8F5] text-slate-900 overflow-x-hidden">
+    <div id="splash-screen" class="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center transition-opacity duration-700">
+    <div class="relative">
+        <div class="relative">
+            <img src="logo.png" class="text-6xl animate-pulse w-40 inline-block">
+        </div>
+    </div>
+</div>
+
 
     <nav class="fixed top-0 w-full z-40 glass border-b border-orange-100/50 px-6 h-16 flex items-center justify-between">
         <div class="flex items-center gap-2">
-            <span class="text-2xl">🍣</span>
-            <span class="font-black text-xl tracking-tighter uppercase">Sushi<span class="text-orange-600">Eat</span></span>
+            <img src="logo-2.png" class="w-10" alt="" />
+            <span class="font-black text-xl -pl-2 tracking-tighter uppercase">Sushi<span class="text-orange-600">Eat</span></span>
         </div>
         <button onclick="toggleSearch()" class="p-2.5 bg-slate-100 rounded-full text-slate-600 active:scale-90 transition-all">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -274,6 +291,37 @@
             if (orderMode === 'delivery') msg += `📍 *Alamat:* (Tulis alamat lengkap/titik maps)`;
             window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`);
         }
+        async function loadData() {
+    // Catat waktu mulai
+    const startTime = Date.now();
+    
+    try {
+        const response = await fetch('menu.json');
+        menuData = await response.json();
+        categories = Object.keys(menuData);
+        renderTabs();
+        updateCartUI();
+        initSwipe();
+
+        // Hitung sisa waktu tunggu agar genap 2 detik
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(1350 - elapsedTime, 0);
+
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            splash.classList.add('opacity-0'); // Transisi transparan
+            setTimeout(() => {
+                splash.style.display = 'none'; // Hilangkan dari DOM
+            }, 700); // Sesuai durasi duration-700 di class HTML
+        }, remainingTime);
+
+    } catch (e) { 
+        console.error("Menu data not found");
+        // Tetap hilangkan splash jika error agar user tidak stuck
+        document.getElementById('splash-screen').style.display = 'none';
+    }
+}
+
     </script>
 </body>
 </html>
