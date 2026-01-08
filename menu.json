@@ -1,0 +1,121 @@
+{
+  "sushi": [
+    { "name": "Yaki Tuna Spicy", "price": 35000 },
+    { "name": "Yaki Dragon Roll", "price": 35000 },
+    { "name": "Yaki Crab Stick", "price": 30000 },
+    { "name": "Yaki Chizu Chicken Stick", "price": 32000 },
+    { "name": "Yaki Karaage Roll", "price": 35000 },
+    { "name": "Yaki Chicken Stick", "price": 27000 },
+    { "name": "Karaage Roll", "price": 32000 },
+    { "name": "Crab Stick", "price": 27000 },
+    { "name": "Tobiko Crab", "price": 35000 },
+    { "name": "Tuna Katsubushi", "price": 35000 },
+    { "name": "Katsu Salmon", "price": 40000 },
+    { "name": "Tuna Spicy", "price": 32000 },
+    { "name": "Chizu Chicken Stick", "price": 29000 },
+    { "name": "Niku Crab", "price": 32000 },
+    { "name": "Niku Karaage Roll", "price": 32000 },
+    { "name": "Dragon Roll", "price": 32000 },
+    { "name": "Chicken Stick", "price": 24000 },
+    { "name": "Cheezy Monster", "price": 37000 },
+    { "name": "Chizu Maguro", "price": 36000 }
+  ],
+
+  "ramen": [
+    { "name": "Beef Shoyu Ramen", "price": 38000 },
+    { "name": "Katsu Shoyu Ramen", "price": 35000 },
+    { "name": "Karaage Shoyu Ramen", "price": 35000 },
+    { "name": "Beef Curry Ramen", "price": 42000 },
+    { "name": "Katsu Curry Ramen", "price": 38000 },
+    { "name": "Karaage Curry Ramen", "price": 38000 }
+  ],
+
+  "non_coffee": [
+    { "name": "Orange Kult", "price": 24000 },
+    { "name": "Lychee Kult", "price": 24000 },
+    { "name": "Mango Kult", "price": 24000 },
+    { "name": "Strawberry Kult", "price": 24000 },
+    { "name": "Milo", "price": 12000 },
+    { "name": "Milo Spesial", "price": 17000 },
+    { "name": "Vanilla Regal", "price": 25000 },
+    { "name": "Vanilla Oreo", "price": 25000 },
+    { "name": "Vanilla Lotus", "price": 26000 },
+    { "name": "Caramel Regal", "price": 25000 },
+    { "name": "Caramel Oreo", "price": 25000 },
+    { "name": "Caramel Lotus", "price": 26000 },
+    { "name": "Hazelnut Regal", "price": 25000 },
+    { "name": "Hazelnut Oreo", "price": 25000 },
+    { "name": "Hazelnut Lotus", "price": 26000 },
+    { "name": "Chocolate Hazelnut", "price": 25000 },
+    { "name": "Signature Chocolate", "price": 22000 },
+    { "name": "Avocado Juice", "price": 22000 },
+    { "name": "Lemon Tea", "price": 15000 },
+    { "name": "Lychee Tea", "price": 17000 },
+    { "name": "Oreo Shake", "price": 23000 },
+    { "name": "Matcha Latte", "price": 24000 },
+    { "name": "Matcha Strawberry", "price": 26000 },
+    { "name": "Strawberry Milk", "price": 23000 },
+    { "name": "Butterscotch Milk Caramel", "price": 25000 },
+    { "name": "Air Mineral", "price": 7000 }
+  ],
+
+  "coffee": [
+    { "name": "Avocado Coffee", "price": 24000 },
+    { "name": "Cappuccino Iced Coffee", "price": 22000 },
+    { "name": "Hot Cappuccino", "price": 22000 },
+    { "name": "Ice Coffee Latte", "price": 22000 },
+    { "name": "Caramel Macchiato", "price": 25000 },
+    { "name": "Kopi Gula Aren", "price": 25000 },
+    { "name": "Coffee Float", "price": 24000 }
+  ],
+
+  "soda": [
+    { "name": "Sparkling Melon", "price": 20000 },
+    { "name": "Sparkling Strawberry", "price": 20000 },
+    { "name": "Sparkling Lychee", "price": 20000 },
+    { "name": "Sparkling Mango", "price": 20000 },
+    { "name": "Fanta", "price": 12000 },
+    { "name": "Fanta Float", "price": 17000 },
+    { "name": "Coca-Cola", "price": 12000 },
+    { "name": "Cola Float", "price": 17000 },
+    { "name": "Sprite", "price": 12000 },
+    { "name": "Sprite Float", "price": 17000 },
+    { "name": "Fresh Squeezed Lemonade", "price": 20000 }
+  ],
+
+  "nasi": [
+    { "name": "Nasi Chicken Katsu Teriyaki", "price": 30000 },
+    { "name": "Nasi Katsu Mayo", "price": 30000 },
+    { "name": "Nasi Chicken Karaage", "price": 30000 },
+    { "name": "Nasi Beef Teriyaki", "price": 34000 }
+  ],
+
+  "waffle": [
+    { "name": "Waffle Tiramisu", "price": 20000 },
+    { "name": "Waffle Coklat", "price": 20000 },
+    { "name": "Waffle Cappuccino", "price": 20000 },
+    { "name": "Waffle Banana Milk", "price": 20000 },
+    { "name": "Waffle Taro", "price": 20000 },
+    { "name": "Waffle Vanilla", "price": 20000 },
+    { "name": "Waffle Matcha", "price": 20000 },
+    { "name": "Waffle Hazelnut Nutella", "price": 20000 },
+    { "name": "Ice Cream Topping", "price": 5000 }
+  ],
+
+  "appetizer": [
+    { "name": "Chicken Sausage", "price": 20000 },
+    { "name": "Tahu Tuna", "price": 22000 },
+    { "name": "Burger Chicken", "price": 20000 },
+    { "name": "Burger Chicken + Keju", "price": 25000 },
+    { "name": "Burger Beef", "price": 22000 },
+    { "name": "Burger Beef + Keju", "price": 27000 },
+    { "name": "Kebab Chicken", "price": 20000 },
+    { "name": "Kebab Chicken + Keju", "price": 25000 },
+    { "name": "Kebab Beef", "price": 22000 },
+    { "name": "Kebab Beef + Keju", "price": 27000 },
+    { "name": "French Fries", "price": 20000 },
+    { "name": "Chicken Nugget", "price": 20000 },
+    { "name": "Chicken Sausage", "price": 20000 },
+    { "name": "Mix Platter", "price": 25000 }
+  ]
+}
