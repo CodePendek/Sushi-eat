@@ -13,7 +13,7 @@
             background-color: #FCF8F5;
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
         
         .category-chip.active {
             background: #ea580c; color: white; border-color: #ea580c;
@@ -91,7 +91,7 @@
             <button onclick="clearCart()" class="text-[10px] font-bold text-red-500 uppercase bg-red-50 px-3 py-2 rounded-lg">Hapus</button>
         </div>
         <div class="p-4 space-y-4 bg-slate-50 border-b">
-            <input type="text" id="user-name" placeholder="Nama Anda..." class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm">
+            <input type="text" id="user-name" oninput="saveName()" placeholder="Nama Anda..." class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm">
             <div class="grid grid-cols-2 gap-2">
                 <button id="opt-takeaway" onclick="setMode('takeaway')" class="py-3 rounded-xl font-bold text-[11px] uppercase border-2 border-orange-500 bg-orange-500 text-white">Take Away</button>
                 <button id="opt-delivery" onclick="setMode('delivery')" class="py-3 rounded-xl font-bold text-[11px] uppercase border-2 border-slate-200 bg-white text-slate-400">Delivery</button>
@@ -116,15 +116,10 @@
         let orderMode = 'takeaway';
         let categories = [];
         let currentCatIndex = 0;
-        const noWA = "082298232611"; 
+        const noWA = "6282298232611"; 
 
         window.addEventListener('load', loadData);
-        
-        // Logika Back Button Terintegrasi
-        window.onpopstate = () => {
-            closeLightboxUI();
-            closeCartUI();
-        };
+        window.onpopstate = () => { closeLightboxUI(); closeCartUI(); };
 
         async function loadData() {
             try {
@@ -133,6 +128,7 @@
                 categories = Object.keys(menuData);
                 renderTabs();
                 updateCartUI();
+                loadName();
                 initSwipe();
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
@@ -141,9 +137,8 @@
         }
 
         function renderTabs() {
-            const container = document.getElementById('tab-container');
-            container.innerHTML = categories.map((cat, index) => `
-                <button id="tab-${index}" onclick="switchCategory(${index})" 
+            document.getElementById('tab-container').innerHTML = categories.map((cat, i) => `
+                <button id="tab-${i}" onclick="switchCategory(${i})" 
                     class="category-chip flex-shrink-0 px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-400 border border-slate-100 uppercase tracking-wide transition-all">
                     ${cat.replace(/_/g, ' ')}
                 </button>
@@ -151,21 +146,17 @@
             switchCategory(0);
         }
 
-        function switchCategory(index) {
-            currentCatIndex = index;
+        function switchCategory(i) {
+            currentCatIndex = i;
             document.querySelectorAll('.category-chip').forEach(b => b.classList.remove('active'));
-            const activeTab = document.getElementById(`tab-${index}`);
-            if(activeTab) {
-                activeTab.classList.add('active');
-                activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-            }
-            renderMenu(menuData[categories[index]]);
+            document.getElementById(`tab-${i}`)?.classList.add('active');
+            document.getElementById(`tab-${i}`)?.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            renderMenu(menuData[categories[i]]);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function renderMenu(items) {
-            const grid = document.getElementById('menu-grid');
-            grid.innerHTML = items.map((item, idx) => `
+            document.getElementById('menu-grid').innerHTML = items.map((item, idx) => `
                 <div class="bg-white rounded-3xl p-3 shadow-sm border border-orange-50 flex flex-col active:scale-[0.98] transition-all fade-in" style="animation-delay: ${idx * 0.05}s">
                     <div class="rounded-2xl mb-3 aspect-square bg-slate-50 overflow-hidden" onclick="openLightbox('${item.image}')">
                         <img src="${item.image}" onerror="this.src='https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400'" class="w-full h-full object-cover">
@@ -181,12 +172,10 @@
             `).join('');
         }
 
-        // --- UI Control Functions ---
         function openLightbox(src) {
-            const lb = document.getElementById('lightbox');
             document.getElementById('lightbox-img').src = src;
-            lb.classList.add('active');
-            history.pushState({lightbox: true}, ''); // Push state agar tombol back bisa digunakan
+            document.getElementById('lightbox').classList.add('active');
+            history.pushState({lightbox: true}, '');
         }
 
         function closeLightboxUI() {
@@ -194,43 +183,34 @@
         }
 
         function toggleCart(show) {
-            if (show) {
-                history.pushState({cart: true}, '');
-                openCartUI();
-            } else {
-                history.back();
-            }
+            show ? (history.pushState({cart: true}, ''), openCartUI()) : history.back();
         }
 
         function handleBack() {
-            // Jika ada UI yang terbuka, gunakan history.back() untuk memicu onpopstate
-            if (document.getElementById('lightbox').classList.contains('active') || 
-                document.getElementById('cart-sidebar').style.transform === 'translateX(0px)') {
-                history.back();
-            }
+            const lb = document.getElementById('lightbox').classList.contains('active');
+            const cs = document.getElementById('cart-sidebar').style.transform === 'translateX(0px)';
+            if (lb || cs) history.back();
         }
 
         function openCartUI() {
-            const sidebar = document.getElementById('cart-sidebar');
+            document.getElementById('cart-sidebar').style.transform = 'translateX(0)';
             const overlay = document.getElementById('overlay');
-            sidebar.style.transform = 'translateX(0)';
             overlay.classList.remove('hidden');
             setTimeout(() => overlay.style.opacity = '1', 10);
         }
 
         function closeCartUI() {
-            const sidebar = document.getElementById('cart-sidebar');
+            document.getElementById('cart-sidebar').style.transform = 'translateX(100%)';
             const overlay = document.getElementById('overlay');
-            sidebar.style.transform = 'translateX(100%)';
             overlay.style.opacity = '0';
             setTimeout(() => overlay.classList.add('hidden'), 300);
         }
 
-        // --- Logic Functions ---
         function addToCart(name, price) {
             const item = cart.find(i => i.name === name);
-            if (item) item.quantity++; else cart.push({ name, price, quantity: 1 });
-            saveCart(); updateCartUI();
+            item ? item.quantity++ : cart.push({ name, price, quantity: 1 });
+            saveCart(); 
+            updateCartUI();
         }
 
         function updateCartUI() {
@@ -240,8 +220,7 @@
             document.getElementById('total-bottom').innerText = `Rp ${total.toLocaleString()}`;
             document.getElementById('cart-subtotal').innerText = `Rp ${total.toLocaleString()}`;
             const bar = document.getElementById('bottom-bar');
-            if(count > 0) bar.classList.remove('translate-y-32', 'opacity-0');
-            else bar.classList.add('translate-y-32', 'opacity-0');
+            count > 0 ? bar.classList.remove('translate-y-32', 'opacity-0') : bar.classList.add('translate-y-32', 'opacity-0');
             document.getElementById('cart-items').innerHTML = cart.map((item, i) => `
                 <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl">
                     <div class="flex-1">
@@ -257,28 +236,55 @@
             `).join('');
         }
 
-        function updateQty(i, c) { if (cart[i].quantity + c > 0) cart[i].quantity += c; else cart.splice(i, 1); saveCart(); updateCartUI(); }
+        function updateQty(i, c) { 
+            cart[i].quantity + c > 0 ? cart[i].quantity += c : cart.splice(i, 1); 
+            saveCart(); 
+            updateCartUI(); 
+        }
+
         function saveCart() { localStorage.setItem('sushieat_cart', JSON.stringify(cart)); }
-        function clearCart() { if(confirm('Hapus semua pesanan?')) { cart = []; saveCart(); updateCartUI(); handleBack(); } }
+        
+        function saveName() {
+            localStorage.setItem('sushieat_name', document.getElementById('user-name').value);
+        }
+
+        function loadName() {
+            const savedName = localStorage.getItem('sushieat_name');
+            if (savedName) document.getElementById('user-name').value = savedName;
+        }
+
+        function clearCart() { 
+            if(confirm('Hapus semua pesanan?')) { 
+                cart = []; 
+                saveCart(); 
+                updateCartUI(); 
+                handleBack(); 
+            } 
+        }
 
         function toggleSearch() {
             const s = document.getElementById('search-container');
             const isOpen = !s.classList.contains('-translate-y-full');
-            if (isOpen) s.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
-            else { s.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none'); document.getElementById('search-input').focus(); }
+            isOpen ? s.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none') 
+                   : (s.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none'), document.getElementById('search-input').focus());
         }
 
         function searchMenu() {
             const q = document.getElementById('search-input').value.toLowerCase();
-            let flat = []; Object.values(menuData).forEach(cat => flat = [...flat, ...cat]);
+            let flat = [];
+            Object.values(menuData).forEach(cat => flat = [...flat, ...cat]);
             renderMenu(flat.filter(i => i.name.toLowerCase().includes(q)));
         }
 
         function setMode(mode) {
             orderMode = mode;
-            document.getElementById('delivery-info').style.opacity = (mode === 'delivery') ? '1' : '0';
-            document.getElementById('opt-takeaway').className = (mode === 'takeaway') ? "py-3 rounded-xl font-bold text-[11px] uppercase border-2 border-orange-500 bg-orange-500 text-white" : "py-3 rounded-xl font-bold text-[11px] uppercase border-2 border-slate-200 bg-white text-slate-400";
-            document.getElementById('opt-delivery').className = (mode === 'delivery') ? "py-3 rounded-xl font-bold text-[11px] uppercase border-2 border-orange-500 bg-orange-500 text-white" : "py-3 rounded-xl font-bold text-[11px] uppercase border-2 border-slate-200 bg-white text-slate-400";
+            document.getElementById('delivery-info').style.opacity = mode === 'delivery' ? '1' : '0';
+            ['takeaway', 'delivery'].forEach(m => {
+                const btn = document.getElementById(`opt-${m}`);
+                btn.className = mode === m 
+                    ? "py-3 rounded-xl font-bold text-[11px] uppercase border-2 border-orange-500 bg-orange-500 text-white"
+                    : "py-3 rounded-xl font-bold text-[11px] uppercase border-2 border-slate-200 bg-white text-slate-400";
+            });
         }
 
         function initSwipe() {
@@ -299,22 +305,12 @@
             if (!name) return alert("Boleh tau nama kakak siapa? 😊");
             if (cart.length === 0) return;
 
-            const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
             const total = cart.reduce((a, b) => a + (b.price * b.quantity), 0);
-            const metode = (orderMode === 'delivery') ? 'Delivery' : 'Take Away';
+            const metode = orderMode === 'delivery' ? 'Delivery' : 'Take Away';
 
-            let msg = `Halo, mau order Sushi Eat.\n`;
-            msg += `👤 *Nama:* ${name}\n`;
-            msg += `📦 *Metode:* ${metode}\n\n`;
-            msg += `*Daftar Pesanan:*\n`;
-            
-            cart.forEach((item, index) => {
-                msg += `${index + 1}. ${item.name} (${item.quantity}x)\n`;
-            });
-
+            let msg = `Halo, mau order Sushi Eat.\n👤 *Nama:* ${name}\n📦 *Metode:* ${metode}\n\n*Daftar Pesanan:*\n`;
+            cart.forEach((item, i) => msg += `${i + 1}. ${item.name} (${item.quantity}x)\n`);
             msg += `\n💰 *Total Belanja: Rp ${total.toLocaleString()}*\n`;
-            msg += `Pesanan ini dikirim jam ${timeStr}. Mohon dicek kak, terima kasih banyak!`;
 
             window.open(`https://wa.me/${noWA}?text=${encodeURIComponent(msg)}`);
         }
